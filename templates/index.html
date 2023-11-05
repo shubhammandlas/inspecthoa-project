@@ -4,21 +4,57 @@
 <head>
     <title>Inspecthoa</title>
     <script>
+        function downloadFile(filename) {
+            window.location.href = `/api/download/${filename}`;
+        }
         document.addEventListener('DOMContentLoaded', function () {
             const fetchDataButton = document.getElementById('fetch-data');
             const dataContainer = document.getElementById('data-container');
-
-            const pushFiles = document.getElementById('publish-file-data');
+            const uploadFiles = document.getElementById('publish-file-data');
+            const authToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6Ikluc3BlY3RIb2EiLCJpYXQiOjE1MTYyMzkwMjJ9.KVI2KIJSp_GFhWyBVFUiiOcvcT9CilfzYj0d_wnw4Hc";
+            const headers = {
+                "Authorization": `Bearer ${authToken}`,
+            }
 
             fetchDataButton.addEventListener('click', function () {
                 // Fetch data from the API endpoint
-                fetch('/api/data')
+                fetch('/api/files', { headers })
                     .then(response => response.json())
                     .then(data => {
-                        dataContainer.innerHTML = '<h2>Data from API:</h2>';
+                        dataContainer.innerHTML = '<h2>Request Data from API:</h2>';
                         data.forEach(item => {
-                            dataContainer.innerHTML += `<p>ID: ${item.id}, Name: ${item.name}</p>`;
+                            console.log('itemm', item)
+                            dataContainer.innerHTML += `
+                                <div>
+                                    <p>ID: ${item.filename}</p>
+                                    <p>Name: ${item.path}</p>
+                                    <button onclick="downloadFile('${item.filename}')">Download</button>
+                                </div>`;
                         });
+                    })
+                    .catch(error => console.error('Error fetching data: ', error));
+                
+            });
+
+            
+
+            uploadFiles.addEventListener('submit', function (event) {
+                event.preventDefault();
+                const fileInput = document.querySelector('input[type="file"]');
+                const file = fileInput.files[0];
+                console.log('herrere', file)
+
+                if (!file) {
+                    alert("Please select a file to upload.");
+                    return;
+                }
+
+                const formData = new FormData();
+                formData.append("file", file);
+                fetch('/api/compute', { method: 'POST', body: formData, headers })
+                    .then()
+                    .then(data => {
+
                     })
                     .catch(error => console.error('Error fetching data: ', error));
             });
@@ -29,13 +65,19 @@
 <body>
     <h1>Compute Your File!</h1>
     <p>This is a assignment project with a simple frontend.</p>
-    <button id="publish-file-data">Upload File</button>
+    <!-- <button id="publish-file-data">Upload File</button> -->
 
     <button id="fetch-data">Fetch API Data</button>
 
     <div id="data-container">
         <!-- Data fetched from the API will be displayed here -->
     </div>
+
+    <h2>Upload a File</h2>
+    <form id="publish-file-data" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".csv, .xlsx">
+        <input id="publish-file-data" type="submit" value="Upload">
+    </form>
 </body>
 
 </html>

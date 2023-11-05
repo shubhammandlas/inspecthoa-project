@@ -38,7 +38,7 @@ if __name__ == '__main__':
 # # SECRET_KEY = config('SECRET_KEY')
 # # DATABASE_URI = config('DATABASE_URI')
 
-# app.config['SECRET_KEY'] = 'secret_inspecthoa'
+app.config['SECRET_KEY'] = 'secret_inspecthoa'
 # # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://shugupta:@localhost/inspecthoa'
 
 # api = Api(app)

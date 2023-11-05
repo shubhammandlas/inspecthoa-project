@@ -1,29 +1,44 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, send_file
+from flask_restful import Api, Resource, reqparse, inputs
 from models.db import get_db
 from models.user import User
+from models.request import Request
 from models.db import SessionLocal
-
+import asyncio
+import aiohttp
+from celeryApp.celery_worker import perform_computation
+import csv
+import openpyxl
+from datetime import datetime
+import os
+from services.computeService.computeFile import storeAndComputeFile
 
 api_routes = Blueprint('api_data', __name__)
+file_directory = 'docs'
+
+@api_routes.route('/compute', methods=['POST'])
+async def compute_route():
+    uploaded_file = request.files.get('file')
+    await storeAndComputeFile(uploaded_file)
+    return jsonify({"message": "Files are saved"}) 
 
 
-@api_routes.route('/api/data')
-def compute_route():
-    # db = get_db()
-    # Replace this with your data retrieval logic
-    data = {"message": "API data here11"}
-    new_user = User(username='shubhammandlas',
-                    email="shubham.mandlas@gmail.com")
-    print('New User-- ', new_user)
-    # db.add(new_user)
+@api_routes.route('/files', methods=['GET'])
+def get_files():
+    response = []
     with SessionLocal() as db:
-        # db.add(new_user)
-        # db.commit()
-        user_data = {
-            "id": new_user.id,
-            "username": new_user.username,
-            "email": new_user.email
-        }
-        return jsonify(user_data)
+        requests = db.query(Request).all()
+        
+    for filename in os.listdir(file_directory):
+        file_path = os.path.join(file_directory, filename)
+        response.append({'filename': filename, 'path': file_path})
+    return jsonify(response)
 
-    # return jsonify(data)
+
+@api_routes.route('/download/<filename>', methods=['GET'])
+def download_file(filename):
+    file_path = os.path.join(file_directory, filename)
+    if os.path.exists(file_path):
+        return send_file(file_path, as_attachment=True)
+    else:
+        return 'File not found', 404

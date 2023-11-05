@@ -1,22 +1,3 @@
-# from flask_sqlalchemy import SQLAlchemy
-# # from models.user import User
-
-# db = SQLAlchemy()
-
-# def init_db(app):
-#     db.init_app(app)
-#     print('Databse connection')
-
-#     # Define your models here
-#     # Example:
-#     # from models.item import Item
-
-#     # Create the database tables
-
-#     with app.app_context():
-#         db.create_all()
-
-
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
