@@ -18,9 +18,15 @@ file_directory = 'docs'
 
 @api_routes.route('/compute', methods=['POST'])
 async def compute_route():
+    auth_header = request.headers.get('Authorization')
+    if not auth_header:
+        return jsonify({"error": "Authorization header is missing"}), 401
+    token = auth_header.split("Bearer ")[-1]
+    if (os.environ['AUTH_TOKEN'] != token):
+        return jsonify({"error": "Authorization header is invalid"}), 401
     uploaded_file = request.files.get('file')
     await storeAndComputeFile(uploaded_file)
-    return jsonify({"message": "Files are saved"}) 
+    return jsonify({"message": "Files are saved"})
 
 
 @api_routes.route('/files', methods=['GET'])

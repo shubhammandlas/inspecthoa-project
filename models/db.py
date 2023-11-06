@@ -1,9 +1,10 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+import os
 
 # Define your database URL. Replace 'your_database_url' with your actual database URL.
-database_url = 'postgresql://shugupta:@localhost/inspecthoa'
+database_url = os.environ['DATABASE_URI'] 
 
 # Create a SQLAlchemy engine
 engine = create_engine(database_url)

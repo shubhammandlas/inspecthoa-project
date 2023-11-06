@@ -27,6 +27,12 @@ Worker Thread For Async operation
     * celery -A celeryApp.celery_worker worker --loglevel=info
     (Location of celery file ->  celeryApp.celery_worker)
 
-Apis
+.env File
+    * Please populate your .env file with these
+    SECRET_KEY=api_secret_key_inspect_hoa
+    DATABASE_URI='postgresql://shugupta:@localhost/inspecthoa'
+    AUTH_TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6Ikluc3BlY3RIb2EiLCJpYXQiOjE1MTYyMzkwMjJ9.KVI2KIJSp_GFhWyBVFUiiOcvcT9CilfzYj0d_wnw4Hc" 
+
+
 
 
