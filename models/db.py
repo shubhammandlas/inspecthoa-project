@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker
 import os
 
 # Define your database URL. Replace 'your_database_url' with your actual database URL.
-database_url = os.environ['DATABASE_URI'] 
+database_url = 'postgresql://shugupta:@localhost/inspecthoa'
 
 # Create a SQLAlchemy engine
 engine = create_engine(database_url)

@@ -17,17 +17,15 @@
             }
 
             fetchDataButton.addEventListener('click', function () {
-                // Fetch data from the API endpoint
                 fetch('/api/files', { headers })
                     .then(response => response.json())
                     .then(data => {
                         dataContainer.innerHTML = '<h2>Request Data from API:</h2>';
                         data.forEach(item => {
-                            console.log('itemm', item)
                             dataContainer.innerHTML += `
                                 <div>
-                                    <p>ID: ${item.filename}</p>
-                                    <p>Name: ${item.path}</p>
+                                    <p>FileName: ${item.filename}</p>
+                                    <p>Result: ${item.response}</p>
                                     <button onclick="downloadFile('${item.filename}')">Download</button>
                                 </div>`;
                         });
@@ -35,8 +33,6 @@
                     .catch(error => console.error('Error fetching data: ', error));
                 
             });
-
-            
 
             uploadFiles.addEventListener('submit', function (event) {
                 event.preventDefault();
