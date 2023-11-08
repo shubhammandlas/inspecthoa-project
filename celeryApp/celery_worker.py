@@ -12,14 +12,18 @@ celery = Celery(
 
 @celery.task
 def perform_computation(data, requestId):
-    response = functools.reduce(
-        lambda final, item : final + int(eval(f'{item["A"]}{item["O"]}{item["B"]}')),
-        data,
-        0
-    )
+    response = calculate(data)
     result = Results(requestId=requestId, result=response)
     print('fileeress', response)
     with SessionLocal() as db:
         db.add(result)
         db.commit()
-    
+
+
+def calculate(data):
+    return functools.reduce(
+        lambda final, item: final +
+        int(eval(f'{item["A"]}{item["O"]}{item["B"]}')),
+        data,
+        0
+    )
